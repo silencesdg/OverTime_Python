@@ -33,13 +33,13 @@ class poster:
         openner = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookie))
         openner.addheaders = self.header
         r = openner.open(self.url, post_date)
-
-        return r.read()
+        print(r.read().decode('utf-8'))
+        return r
 
 def veri(p:poster,u:user):
     print('\n获取验证码中。。。')
     p.data = [("mod", 'GetverificationCode'), ("employeeCode", u.code), ("employeePwd", u.psw), ("____v", random.random())]
-    rCheck = p.excute().decode('utf-8')
+    rCheck = p.excute().read().decode('utf-8')
     strRep = json.loads(rCheck)
     repHeader = strRep['responseHeader']
     strResult = repHeader['result']
@@ -54,12 +54,14 @@ def login(p:poster,u:user):
     checkCode = input("\n收到的验证码是:")
     print('\n正在登录中。。。')
     p.data = [("mod", 'onLogin'), ("employeeCode", u.code), ("employeePwd", u.psw),("checkcode",checkCode), ("____v", random.random())]
-    rLogin = p.excute().decode('utf-8')
+    rep = p.excute()
+    rLogin = rep.read().decode('utf-8')
     strRep = json.loads(rLogin)
     repHeader = strRep['responseHeader']
     strResult = repHeader['result']
     if strResult == "ok":
         #TODO:设置cookie
+        p.cookie = rep.getheaders['Set-Cookie']
         print('\n登陆成功')
     else:
         print('\n验证码不正确或已过期')
@@ -68,7 +70,7 @@ def login(p:poster,u:user):
 def fetchData(p:poster):
     print('\n正在拉取加班数据。。。')
     p.data = [("mod", "onLoad"), ("pageIndex", "1"), ("StartTime", ""), ("EndTime",""), ("____v", random.random())]
-    rOverTimes = p.excute().decode('utf-8')
+    rOverTimes = p.excute().read().decode('utf-8')
     print('\n拉取加班数据成功')
     print('\n')
     print(rOverTimes)
