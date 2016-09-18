@@ -95,8 +95,8 @@ def start(u:user):
 
 
 if __name__ == '__main__':
-    code = "12732"
-    psw = "SKL12732"
+    code = ""
+    psw = ""
 
     u = user(code,psw)
     start(u)
