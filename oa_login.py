@@ -17,7 +17,7 @@ class user:
 
 
 class poster:
-    url = "http://moa.17u.cn"
+    url = ""
     cookie = ""
     header = [("Accept-Encoding", "gzip,deflate"), ("Accept-Language", "zh-CN,en-US;q=0.8"), (
         "User-Agent",
